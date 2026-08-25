@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>PAC·MAN — Arcade Reborn</title>
+<meta name="description" content="A neon-drenched, browser-native Pac-Man-inspired arcade game. Chomp pellets, dodge ghosts, chase the high score.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============================================================
+     SKIP LINK (a11y)
+============================================================= -->
+<a class="skip-link" href="#game">Skip to game</a>
+
+<!-- ============================================================
+     BACKGROUND FX (decorative, aria-hidden)
+============================================================= -->
+<div class="bg-fx" aria-hidden="true">
+  <div class="bg-grid"></div>
+  <div class="bg-glow bg-glow--pink"></div>
+  <div class="bg-glow bg-glow--blue"></div>
+</div>
+
+<!-- ============================================================
+     HEADER
+============================================================= -->
+<header class="site-header" id="top">
+  <div class="header-inner">
+    <a class="brand" href="#top" aria-label="PAC-MAN home">
+      <span class="brand-dot" aria-hidden="true"></span>
+      <span class="brand-text">PAC<span class="brand-dash">·</span>MAN</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Primary">
+      <a href="#top">Home</a>
+      <a href="#game">Game</a>
+      <a href="#how-to-play">How to Play</a>
+      <a href="#highscores">High Scores</a>
+    </nav>
+
+    <div class="header-actions">
+      <button type="button" class="icon-toggle" id="soundToggle" aria-pressed="true" aria-label="Toggle sound">
+        <svg class="icon icon-sound-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path d="M16.5 8.5a5 5 0 010 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M19 6a9 9 0 010 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <svg class="icon icon-sound-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+      <button type="button" class="icon-toggle" id="crtToggle" aria-pressed="false" aria-label="Toggle CRT scanline effect">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3 10h18M3 14h18" stroke="currentColor" stroke-width="1.2" opacity="0.8"/></svg>
+      </button>
+    </div>
+
+    <button type="button" class="nav-burger" id="navBurger" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobileNav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <nav class="mobile-nav" id="mobileNav" aria-label="Mobile">
+    <a href="#top">Home</a>
+    <a href="#game">Game</a>
+    <a href="#how-to-play">How to Play</a>
+    <a href="#highscores">High Scores</a>
+  </nav>
+</header>
+
+<main>
+
+<!-- ============================================================
+     HERO
+============================================================= -->
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> Browser Arcade · No Install</p>
+      <h1 class="hero-title">READY TO<br><span class="hero-title-accent">CHOMP?</span></h1>
+      <p class="hero-desc">Enter the maze, collect every pellet, dodge the ghosts, and chase the highest score.</p>
+      <div class="hero-actions">
+        <a href="#game" class="btn btn-primary" id="playNowBtn">
+          <span>PLAY NOW</span>
+        </a>
+        <a href="#how-to-play" class="btn btn-ghost">
+          <span>HOW TO PLAY</span>
+        </a>
+      </div>
+      <div class="hero-stats" aria-hidden="true">
+        <div class="hero-stat"><span class="hero-stat-num">4</span><span class="hero-stat-label">Ghosts</span></div>
+        <div class="hero-stat"><span class="hero-stat-num">3</span><span class="hero-stat-label">Levels</span></div>
+        <div class="hero-stat"><span class="hero-stat-num">∞</span><span class="hero-stat-label">Replays</span></div>
+      </div>
+    </div>
+
+    <div class="hero-art" aria-hidden="true">
+      <div class="hero-art-frame">
+        <div class="maze-lines"></div>
+        <div class="hero-pellet hp1"></div>
+        <div class="hero-pellet hp2"></div>
+        <div class="hero-pellet hp3"></div>
+        <div class="hero-pellet hp4"></div>
+        <div class="hero-pellet hp5"></div>
+        <div class="hero-power"></div>
+        <div class="hero-pacman">
+          <div class="hero-pacman-top"></div>
+          <div class="hero-pacman-bottom"></div>
+        </div>
+        <div class="hero-ghost hero-ghost--red">
+          <div class="ghost-eyes"><span></span><span></span></div>
+        </div>
+        <div class="hero-ghost hero-ghost--pink">
+          <div class="ghost-eyes"><span></span><span></span></div>
+        </div>
+        <div class="hero-ghost hero-ghost--cyan">
+          <div class="ghost-eyes"><span></span><span></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-fade" aria-hidden="true"></div>
+</section>
+
+<!-- ============================================================
+     GAME SECTION
+============================================================= -->
+<section class="game-section" id="game">
+  <div class="section-head">
+    <p class="eyebrow eyebrow--center"><span class="eyebrow-dot" aria-hidden="true"></span> The Game</p>
+    <h2 class="section-title">STEP INTO THE MAZE</h2>
+  </div>
+
+  <div class="arcade-shell">
+
+    <!-- HUD -->
+    <div class="hud" role="status" aria-label="Game status">
+      <div class="hud-item">
+        <span class="hud-label">Score</span>
+        <span class="hud-value" id="hudScore">000000</span>
+      </div>
+      <div class="hud-item">
+        <span class="hud-label">High Score</span>
+        <span class="hud-value" id="hudHighScore">000000</span>
+      </div>
+      <div class="hud-item">
+        <span class="hud-label">Level</span>
+        <span class="hud-value" id="hudLevel">01</span>
+      </div>
+      <div class="hud-item">
+        <span class="hud-label">Lives</span>
+        <span class="hud-value hud-lives" id="hudLives" aria-label="3 lives remaining">
+          <svg class="life-heart" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.3C.5 8 2 4.5 5.6 4c2-.3 3.7.7 4.9 2.4C11.7 4.7 13.4 3.7 15.4 4 19 4.5 20.5 8 22 11.7 19.5 16.4 12 21 12 21z"/></svg>
+          <svg class="life-heart" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.3C.5 8 2 4.5 5.6 4c2-.3 3.7.7 4.9 2.4C11.7 4.7 13.4 3.7 15.4 4 19 4.5 20.5 8 22 11.7 19.5 16.4 12 21 12 21z"/></svg>
+          <svg class="life-heart" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.3C.5 8 2 4.5 5.6 4c2-.3 3.7.7 4.9 2.4C11.7 4.7 13.4 3.7 15.4 4 19 4.5 20.5 8 22 11.7 19.5 16.4 12 21 12 21z"/></svg>
+        </span>
+      </div>
+    </div>
+
+    <!-- CABINET -->
+    <div class="arcade-cabinet">
+      <div class="cabinet-screen">
+        <canvas id="gameCanvas" width="456" height="504" role="img" aria-label="Pac-Man game board"></canvas>
+
+        <!-- START OVERLAY -->
+        <div class="overlay" id="startOverlay">
+          <p class="overlay-title overlay-title--small">PAC·MAN</p>
+          <p class="overlay-blink">READY?</p>
+          <button type="button" class="btn btn-primary btn-lg" id="startGameBtn">START GAME</button>
+          <div class="overlay-controls">
+            <p>Controls</p>
+            <div class="key-hint">
+              <span class="key">←</span><span class="key">↑</span><span class="key">↓</span><span class="key">→</span>
+              <span class="key-sep">/</span>
+              <span class="key key-wide">WASD</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAUSE OVERLAY -->
+        <div class="overlay overlay--hidden" id="pauseOverlay">
+          <p class="overlay-title">PAUSED</p>
+          <button type="button" class="btn btn-primary" id="resumeBtn">RESUME</button>
+        </div>
+
+        <!-- LEVEL COMPLETE OVERLAY -->
+        <div class="overlay overlay--hidden" id="levelCompleteOverlay">
+          <p class="overlay-title overlay-title--accent">LEVEL COMPLETE</p>
+          <p class="overlay-sub" id="levelCompleteBonus">+1000 BONUS</p>
+        </div>
+
+        <!-- GAME OVER OVERLAY -->
+        <div class="overlay overlay--hidden" id="gameOverOverlay">
+          <p class="overlay-title overlay-title--danger">GAME OVER</p>
+          <p class="overlay-sub">Final Score: <span id="finalScore">0</span></p>
+
+          <div class="name-entry" id="nameEntry">
+            <label for="playerName">Enter your name for the leaderboard</label>
+            <div class="name-entry-row">
+              <input type="text" id="playerName" maxlength="10" placeholder="ACE" autocomplete="off" aria-label="Your name">
+              <button type="button" class="btn btn-primary" id="saveScoreBtn">SAVE</button>
+            </div>
+          </div>
+
+          <div class="overlay-actions">
+            <button type="button" class="btn btn-primary" id="tryAgainBtn">TRY AGAIN</button>
+            <button type="button" class="btn btn-ghost" id="backToMenuBtn">BACK TO MENU</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MOBILE CONTROLS -->
+      <div class="mobile-controls" id="mobileControls" aria-label="Touch controls">
+        <div class="dpad">
+          <button type="button" class="dpad-btn dpad-up" data-dir="up" aria-label="Move up">▲</button>
+          <button type="button" class="dpad-btn dpad-left" data-dir="left" aria-label="Move left">◀</button>
+          <button type="button" class="dpad-btn dpad-down" data-dir="down" aria-label="Move down">▼</button>
+          <button type="button" class="dpad-btn dpad-right" data-dir="right" aria-label="Move right">▶</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="game-toolbar">
+      <button type="button" class="btn btn-ghost btn-sm" id="pauseBtn">PAUSE</button>
+      <button type="button" class="btn btn-ghost btn-sm" id="restartBtn">RESTART</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     HOW TO PLAY
+============================================================= -->
+<section class="how-to-play" id="how-to-play">
+  <div class="section-head">
+    <p class="eyebrow eyebrow--center"><span class="eyebrow-dot" aria-hidden="true"></span> Get Oriented</p>
+    <h2 class="section-title">HOW TO PLAY</h2>
+  </div>
+
+  <div class="htp-grid">
+    <article class="htp-card">
+      <div class="htp-icon" aria-hidden="true">
+        <svg viewBox="0 0 48 48"><path d="M24 6v14m0 0l-6-6m6 6l6-6M24 42V28m0 0l-6 6m6-6l6 6M6 24h14m0 0l-6-6m6 6l-6 6M42 24H28m0 0l6-6m-6 6l6 6" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h3>Move</h3>
+      <p>Use arrow keys or WASD to steer through the maze. On mobile, use the on-screen D-pad or swipe.</p>
+    </article>
+
+    <article class="htp-card">
+      <div class="htp-icon" aria-hidden="true">
+        <svg viewBox="0 0 48 48"><circle cx="14" cy="24" r="3" fill="currentColor"/><circle cx="24" cy="24" r="3" fill="currentColor"/><circle cx="34" cy="24" r="4.5" fill="currentColor"/></svg>
+      </div>
+      <h3>Eat Pellets</h3>
+      <p>Collect every pellet to clear the level. Each one adds to your score — clean the maze to advance.</p>
+    </article>
+
+    <article class="htp-card">
+      <div class="htp-icon" aria-hidden="true">
+        <svg viewBox="0 0 48 48"><path d="M12 30V20a12 12 0 0124 0v10l3 4-4-2-3.5 3-3.5-3-3.5 3-3.5-3-3.5 3-4 2z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><circle cx="19" cy="21" r="2" fill="currentColor"/><circle cx="29" cy="21" r="2" fill="currentColor"/></svg>
+      </div>
+      <h3>Avoid Ghosts</h3>
+      <p>Four ghosts hunt you through the maze. One touch costs a life — unless they're vulnerable.</p>
+    </article>
+
+    <article class="htp-card">
+      <div class="htp-icon" aria-hidden="true">
+        <svg viewBox="0 0 48 48"><path d="M24 4l5 14h14l-11 9 4 15-12-9-12 9 4-15-11-9h14z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+      </div>
+      <h3>Power Up</h3>
+      <p>Grab a power pellet to turn the tables — ghosts turn vulnerable and can be eaten for bonus points.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ============================================================
+     HIGH SCORES
+============================================================= -->
+<section class="high-scores" id="highscores">
+  <div class="section-head">
+    <p class="eyebrow eyebrow--center"><span class="eyebrow-dot" aria-hidden="true"></span> Leaderboard</p>
+    <h2 class="section-title">HIGH SCORES</h2>
+  </div>
+
+  <div class="scores-panel">
+    <div class="scores-list" id="scoresList">
+      <!-- populated by script.js -->
+      <p class="scores-empty" id="scoresEmpty">No scores yet — be the first to set the bar.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================================================
+     FOOTER
+============================================================= -->
+<footer class="site-footer">
+  <p>Built with HTML, CSS &amp; vanilla JavaScript. No frameworks, no backend, no external assets.</p>
+</footer>
+
+<script src="script.js" defer></script>
+</body>
+</html>
