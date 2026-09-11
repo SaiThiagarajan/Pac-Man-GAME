@@ -34,7 +34,7 @@
     <a class="brand" href="#top" aria-label="PAC-MAN home">
       <span class="brand-dot" aria-hidden="true"></span>
       <span class="brand-text">PAC<span class="brand-dash">·</span>MAN</span>
-      <span class="version-badge" id="versionBadge">v1.1</span>
+      <span class="version-badge" id="versionBadge">v2.0</span>
     </a>
 
     <nav class="main-nav" aria-label="Primary">
@@ -166,6 +166,10 @@
         <div class="overlay" id="startOverlay">
           <p class="overlay-title overlay-title--small">PAC·MAN</p>
           <p class="overlay-blink">READY?</p>
+          <div class="mode-select" role="group" aria-label="Select game mode">
+            <button type="button" class="mode-btn mode-btn--active" id="modeClassicBtn" data-mode="classic">CLASSIC</button>
+            <button type="button" class="mode-btn" id="modeTurboBtn" data-mode="turbo">TURBO</button>
+          </div>
           <button type="button" class="btn btn-primary btn-lg" id="startGameBtn">START GAME</button>
           <div class="overlay-controls">
             <p>Controls</p>

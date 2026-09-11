@@ -748,8 +748,8 @@ class ScoreManager {
 
   reset() { this.score = 0; this.comboIndex = 0; }
 
-  submit(name, level) {
-    const entry = { name: (name || 'PLAYER').toUpperCase().slice(0, 10), score: this.score, level, date: new Date().toISOString().slice(0, 10) };
+  submit(name, level, mode = 'classic') {
+    const entry = { name: (name || 'PLAYER').toUpperCase().slice(0, 10), score: this.score, level, mode, date: new Date().toISOString().slice(0, 10) };
     this.highScores.push(entry);
     this.highScores.sort((a, b) => b.score - a.score);
     this.highScores = this.highScores.slice(0, 8);
@@ -784,6 +784,7 @@ class Game {
     this.state = 'start'; // start | playing | paused | levelcomplete | gameover
     this.level = 1;
     this.lives = 3;
+    this.mode = 'classic'; // classic | turbo
 
     this.maze = new Maze();
     this.player = new Player(9, 17, BASE_PLAYER_SPEED);
@@ -811,6 +812,8 @@ class Game {
 
       startOverlay: document.getElementById('startOverlay'),
       startGameBtn: document.getElementById('startGameBtn'),
+      modeClassicBtn: document.getElementById('modeClassicBtn'),
+      modeTurboBtn: document.getElementById('modeTurboBtn'),
 
       pauseOverlay: document.getElementById('pauseOverlay'),
       resumeBtn: document.getElementById('resumeBtn'),
@@ -844,6 +847,9 @@ class Game {
 
     e.startGameBtn.addEventListener('click', () => { this.sound.unlock(); this.startGame(); });
     e.playNowBtn.addEventListener('click', () => { this.sound.unlock(); });
+
+    e.modeClassicBtn.addEventListener('click', () => this.setMode('classic'));
+    e.modeTurboBtn.addEventListener('click', () => this.setMode('turbo'));
 
     e.pauseBtn.addEventListener('click', () => this.togglePause());
     e.resumeBtn.addEventListener('click', () => this.togglePause());
@@ -890,6 +896,12 @@ class Game {
 
   showOverlay(el) { el.classList.remove('overlay--hidden'); }
   hideOverlay(el) { el.classList.add('overlay--hidden'); }
+
+  setMode(mode) {
+    this.mode = mode;
+    this.el.modeClassicBtn.classList.toggle('mode-btn--active', mode === 'classic');
+    this.el.modeTurboBtn.classList.toggle('mode-btn--active', mode === 'turbo');
+  }
 
   startGame() {
     this.level = 1;
@@ -938,11 +950,12 @@ class Game {
 
   applyLevelSpeeds() {
     const lvl = this.level;
+    const turboMult = this.mode === 'turbo' ? 1.25 : 1;
     this.player.speed = BASE_PLAYER_SPEED * (1 + (lvl - 1) * 0.05);
     this.ghosts.forEach((g) => {
-      g.baseSpeed = BASE_GHOST_SPEED * (1 + (lvl - 1) * 0.12);
+      g.baseSpeed = BASE_GHOST_SPEED * (1 + (lvl - 1) * 0.12) * turboMult;
     });
-    this.frightenedDuration = Math.max(3000, FRIGHTENED_BASE_MS - (lvl - 1) * 1000);
+    this.frightenedDuration = Math.max(3000, (FRIGHTENED_BASE_MS - (lvl - 1) * 1000) / turboMult);
   }
 
   loseLife() {
@@ -968,7 +981,7 @@ class Game {
 
   saveScore() {
     const name = this.el.playerName.value.trim() || 'PLAYER';
-    this.score.submit(name, this.level);
+    this.score.submit(name, this.level, this.mode);
     this.el.nameEntry.classList.add('is-saved');
     this.renderHighScores();
     this.updateHud();
@@ -1104,7 +1117,7 @@ class Game {
         <span class="score-rank">${String(i + 1).padStart(2, '0')}</span>
         <span>
           <span class="score-name">${escapeHtml(entry.name)}</span>
-          <span class="score-meta">Level ${entry.level} · ${entry.date}</span>
+          <span class="score-meta">Level ${entry.level} · ${(entry.mode || 'classic').toUpperCase()} · ${entry.date}</span>
         </span>
         <span class="score-points">${String(entry.score).padStart(6, '0')}</span>
       `;
